@@ -8,6 +8,7 @@ const sequelize = new Sequelize(
   {
     host: "localhost",
     dialect: "mysql",
+    // logging:false
   }
 );
 
@@ -24,7 +25,7 @@ sequelize
   db.Sequelize = Sequelize;
   db.sequelize = sequelize;
   
-  db.sequelize.sync({ alter:true }).then(() => {
+  db.sequelize.sync({}).then(() => {
     console.log("yes re sync");
   });
 
@@ -41,6 +42,10 @@ sequelize
 
   db.product.hasMany(db.orderDetails)
   db.orderDetails.belongsTo(db.product)
+
+  db.order.hasMany(db.orderDetails)
+  db.orderDetails.belongsTo(db.order)
   
+
 
   module.exports=db

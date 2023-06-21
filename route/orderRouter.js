@@ -1,8 +1,11 @@
 const orderCtr=require('../controller/orderController');
 const express=require('express');
 const router=express.Router();
+
 router.post('/createorder',orderCtr.createOrder);
 router.get('/showAllOrder',orderCtr.showAllOrder);
 router.get('/indetails',orderCtr.indetails);
-// router.get('/showallproduct',productCtr.showallproduct);
+router.get('/undeliveredOrder',orderCtr.undeliveredOrder);
+router.get('/mostrecentOrders',orderCtr.mostrecentOrders);
+
 module.exports=router
