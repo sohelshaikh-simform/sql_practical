@@ -1,10 +1,10 @@
-const { sequelize } = require("../models");
-const db = require("../models");
-const User = db.user;
-const Product = db.product;
-const Order = db.order;
-const orderDetails = db.orderDetails;
+const sequelize = require("../DBConnection");
 
+const User = require("../models/user");
+const Product = require("../models/product");
+const Order = require("../models/order");
+
+// Create User
 const addUser = async (req, res) => {
   const exitUser = await User.findOne({
     where: {
@@ -16,16 +16,17 @@ const addUser = async (req, res) => {
       .status(400)
       .json({ status: "fail", message: "User already exit" });
   }
-
   const user = await User.create(req.body);
   res.status(201).json({ status: "success", user });
 };
 
+// Show All User
 const showAll = async (req, res) => {
   const allUser = await User.findAll();
   res.status(201).json({ status: "success", allUser });
 };
 
+// all the User order list and include Customer nameProduct namesOrder Date Expected delivery date
 const queryOne = async (req, res) => {
   const queryOneResult = await User.findAll({
     attributes: [["username", "Customer name"]],
@@ -42,6 +43,7 @@ const queryOne = async (req, res) => {
   res.status(201).json({ status: "success", queryOneResult });
 };
 
+// Inactive users (Users who hasn’t done any order)
 const inactiveUser = async (req, res) => {
   // select *from users where id not in(select userid from orders);
   const inactive = await User.findAll({
@@ -57,36 +59,25 @@ const inactiveUser = async (req, res) => {
   res.status(201).json({ status: "success", inactive });
 };
 
-
-
+// Top 5 active users (Users having most number of orders)
 const activeUser = async (req, res) => {
-//   const active = await sequelize.query(
-//   "select users.username,COUNT(orders.userId) as totalOrder from users  LEFT OUTER JOIN `orders` AS `orders` ON `users`.`id` = `orders`.`userId` group by users.id order by count(orders.userId) DESC limit 5"
-// );
   const topactive = await Order.findAll({
-
     group: ["userId"],
-      attributes: [
-        "userId",
-        [
-          sequelize.fn("COUNT", sequelize.col("userId")),
-          "Total Orders",
-        ],
-      ],
-      include: [
-        {
-          model: User,
-          attributes: ["username", "email"],
-        },
-      ],
-      order: [["Total Orders", "DESC"]],
-      limit: 5,
+    attributes: [
+      "userId",
+      [sequelize.fn("COUNT", sequelize.col("userId")), "Total Orders"],
+    ],
+    include: [
+      {
+        model: User,
+        attributes: ["username", "email"],
+      },
+    ],
+    order: [["Total Orders", "DESC"]],
+    limit: 5,
   });
   res.status(201).json({ status: "success", topactive });
 };
-
-
-
 
 module.exports = {
   addUser,
