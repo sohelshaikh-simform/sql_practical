@@ -3,12 +3,6 @@ const { DataTypes } = require("sequelize");
 const orderDetails = sequelize.define(
   "orderDetails",
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-    },
     orderId: {
       type: DataTypes.INTEGER,
     },

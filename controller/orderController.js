@@ -14,26 +14,8 @@ const showAllOrder = async (req, res) => {
   res.status(200).json({ status: "Success", data });
 };
 
-// Undelivered Orders
-const undeliveredOrder = async (req, res) => {
-  // select * from orders where order_status="undelivered";
-  const data = await Order.findAll({ where: { order_status: "undelivered" } });
-  res.status(200).json({ status: "Success", data });
-};
-
-// Most Recent Orders
-const mostrecentOrders = async (req, res) => {
-  // select * from orders order by createdAt limit 5;
-  const data = await Order.findAll({
-    order: [["createdAt", "DESC"]],
-    limit: 5,
-  });
-  res.status(200).json({ status: "Success", data });
-};
 
 module.exports = {
   createOrder,
   showAllOrder,
-  undeliveredOrder,
-  mostrecentOrders,
 };
